@@ -100,7 +100,7 @@ const BuscaCategoria = () => {
         <Input type="text" placeholder="Pesquise por médicos" onChange={handlePesquisa}/>
         <Button type="submit">
           {" "}
-          <Search className="" /> Pesquisar
+          <Search className="" /> Buscar
         </Button>
       </div>
 

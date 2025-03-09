@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={geistSans.className}>
-        <div className="md:px-20">
+        <div className="">
           <Header />
           {children}
           <Footer />

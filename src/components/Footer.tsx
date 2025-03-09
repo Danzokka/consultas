@@ -77,18 +77,18 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-100 mt-8 md:-mx-20">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer className="bg-gray-100">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 flex flex-col gap-6">
         <div className="flex justify-center text-teal-600">
           <Image src="/logo.svg" alt="Logo" width={200} height={40} />
         </div>
 
-        <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
+        <p className="mx-auto max-w-md text-center leading-relaxed text-gray-500">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
           consequuntur amet culpa cum itaque neque.
         </p>
 
-        <ul className="mt-12 flex justify-center gap-6 md:gap-8">
+        <ul className="flex justify-center gap-6 md:gap-8">
           {pages.map((page) => (
             <li key={page.nome}>
               <Link
@@ -101,7 +101,7 @@ const Footer = () => {
           ))}
         </ul>
 
-        <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
+        <ul className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           {socials.map((social) => (
             <li key={social.name}>
               <Link

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/carousel";
 
 const BuscaCategoria = () => {
-
   const [pesquisa, setPesquisa] = React.useState("");
 
   const medicos = [
@@ -81,12 +80,11 @@ const BuscaCategoria = () => {
 
   const handlePesquisa = (e: any) => {
     setPesquisa(e.target.value);
-  }
+  };
 
   const medicosFiltrados = medicos.filter((medico) => {
     return medico.especialidade.toLowerCase().includes(pesquisa.toLowerCase());
   });
-
 
   return (
     <div className="flex flex-col items-center gap-8 w-full">
@@ -97,21 +95,27 @@ const BuscaCategoria = () => {
         Procure por um médico e marque sua consulta
       </h3>
       <div className="flex w-full items-center space-x-2">
-        <Input type="text" placeholder="Pesquise por médicos" onChange={handlePesquisa}/>
+        <Input
+          type="text"
+          placeholder="Pesquise por médicos"
+          onChange={handlePesquisa}
+        />
         <Button type="submit">
           {" "}
           <Search className="" /> Buscar
         </Button>
       </div>
 
-      <Carousel>
+      <Carousel opts={{ loop: true, breakpoints: {} }} className="w-full">
         <CarouselContent className="-ml-8">
           {medicosFiltrados.map((medico) => (
-            <CarouselItem key={medico.id} className="basis-1/8 pl-8">
-              <CardMedico props={medico} />
+            <CarouselItem key={medico.id} className="basis-1/4 pl-8">
+              <CardMedico props={medico} className="w-full"/>
             </CarouselItem>
           ))}
         </CarouselContent>
+        <CarouselPrevious className="text-primary" />
+        <CarouselNext className="text-primary" />
       </Carousel>
     </div>
   );

@@ -1,0 +1,27 @@
+/* eslint-disable @next/next/no-img-element */
+import React from "react";
+import Form from "./Form";
+
+export function layout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>): JSX.Element {
+  return (
+    <section className="relative flex flex-wrap lg:h-screen lg:items-center">
+      <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
+        <div className="w-full h-full flex items-center justify-center">{children}</div>
+      </div>
+
+      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2 bg-primary">
+        <img
+          alt=""
+          src="/medics/heart.png"
+          className="absolute inset-0 h-full w-full object-contain"
+        />
+      </div>
+    </section>
+  );
+}
+
+export default layout;

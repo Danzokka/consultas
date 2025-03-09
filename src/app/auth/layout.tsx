@@ -9,11 +9,11 @@ export function layout({
 }>): JSX.Element {
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
-      <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
+      <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-3/5 lg:px-8 lg:py-24">
         <div className="w-full h-full flex items-center justify-center">{children}</div>
       </div>
 
-      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2 bg-primary">
+      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-2/5 bg-primary">
         <img
           alt=""
           src="/medics/heart.png"

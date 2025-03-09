@@ -52,7 +52,7 @@ const Login = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 w-full max-w-md"
+          className="flex flex-col gap-4 w-full max-w-lg"
         >
           <FormField
             control={form.control}
@@ -73,7 +73,7 @@ const Login = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex justify-between">
-                  Password
+                  Senha
                   <Link
                     href="/auth/forgot"
                     className="text-slate-600 text-xs hover:text-primary underline"

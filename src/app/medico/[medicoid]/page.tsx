@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { getMedico } from "./actions";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
 import MedicHero from "./components/MedicHero";
 import MedicStats from "./components/MedicStats";
 import MedicTestimonials from "./components/MedicTestimonials";

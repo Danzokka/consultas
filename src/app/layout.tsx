@@ -6,7 +6,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const geistSans = GeistSans
+const geistSans = GeistSans;
 
 export const metadata: Metadata = {
   title: "Consultas",
@@ -20,12 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={geistSans.className}>
-        <div className="">
-          <Header />
-          {children}
-          <Footer />
-        </div>
+      <body className={`${geistSans.className} flex flex-col min-h-screen gap-10`}>
+        <Header />
+        <div className="px-12">{children}</div>
+        <Footer />
       </body>
     </html>
   );

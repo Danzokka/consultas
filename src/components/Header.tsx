@@ -12,7 +12,9 @@ const Header = () => {
   return (
     <div className="flex justify-between items-center p-4 shadow-sm">
       <div className="flex items-center gap-10">
-        <Image src="/logo.svg" alt="logo" width={180} height={80} />
+        <Link href={"/"}>
+          <Image src="/logo.svg" alt="logo" width={180} height={80} />
+        </Link>
         <ul className="md:flex gap-8 hidden">
           {pages.map((page) => (
             <Link href={page.href} key={page.id}>
@@ -23,7 +25,9 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <Button className="bg-primary font-bold">Entrar</Button>
+      <Button asChild className="bg-primary font-bold">
+        <Link href="/auth/login">Entrar</Link>
+      </Button>
     </div>
   );
 };

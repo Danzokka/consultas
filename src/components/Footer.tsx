@@ -72,8 +72,6 @@ const Footer = () => {
 
   const pages = [
     { nome: "Home", link: "/" },
-    { nome: "Sobre", link: "/sobre" },
-    { nome: "Contato", link: "/contato" },
   ];
 
   return (

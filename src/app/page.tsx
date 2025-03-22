@@ -4,7 +4,6 @@ import { getAllDoctors } from "./actions";
 
 export default async function Home() {
   const doctors = await getAllDoctors();
-  console.log(doctors);
   return (
     <div className="max-w-screen h-full flex flex-col items-center justify-center gap-12">
       {/* Hero */}

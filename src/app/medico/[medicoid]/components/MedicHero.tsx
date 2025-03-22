@@ -39,7 +39,7 @@ const MedicHero = ({ medic, schedules }: MedicHeroProps) => {
             <div className="w-full flex items-center justify-start">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="font-semibold p-6 text-lg">
+                  <Button className="font-semibold">
                     Marcar consulta
                   </Button>
                 </DialogTrigger>

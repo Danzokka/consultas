@@ -10,8 +10,6 @@ const Header = async () => {
 
   const pages = [
     { id: 1, name: "Home", href: "/" },
-    { id: 2, name: "Sobre", href: "/sobre" },
-    { id: 3, name: "Contato", href: "/contato" },
   ];
   return (
     <div className="flex justify-between items-center p-4 shadow-sm">

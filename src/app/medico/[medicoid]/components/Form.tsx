@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { z } from "zod";
@@ -15,8 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Link from "next/link";
-import { medicoData } from "@/classes/medico";
 import {
   Select,
   SelectContent,
@@ -26,31 +24,78 @@ import {
   SelectLabel,
   SelectGroup,
 } from "@/components/ui/select";
-
+import { Doctor, Schedule } from "@/app/lib";
+import { bookSchedule } from "../actions";
+import { redirect } from "next/navigation";
+import { navigate } from "@/app/actions";
 
 interface ScheduleFormProps {
-  medic: medicoData;
+  props: {
+    medic: Doctor;
+    schedules: Schedule[];
+  };
 }
 
 const formSchema = z.object({
-  date: z
-    .string({
-      required_error: "O dia é obrigatório",
-    }),
-  schedule: z
-    .string({
-      required_error: "O horário é obrigatório",
-    })
+  day: z.string({
+    required_error: "O dia é obrigatório",
+  }),
+  hour: z.string({
+    required_error: "O horário é obrigatório",
+  }),
 });
 
-const ScheduleForm = ({ medic }: ScheduleFormProps) => {
+const ScheduleForm = ({ props }: ScheduleFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  // Estado para acompanhar o dia selecionado
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  // Extrair dias únicos para o seletor de dias
+  const uniqueDays = useMemo(() => {
+    const days = new Set<string>();
+    props.schedules.forEach((schedule) => {
+      if (!schedule.userId) {
+        // Apenas horários não agendados
+        days.add(schedule.day);
+      }
+    });
+    return Array.from(days);
+  }, [props.schedules]);
+
+  // Filtrar horários disponíveis para o dia selecionado
+  const availableHours = useMemo(() => {
+    if (!selectedDate) return [];
+
+    return props.schedules
+      .filter((schedule) => schedule.day === selectedDate && !schedule.userId)
+      .map((schedule) => schedule.hour)
+      .sort(); // Ordena os horários
+  }, [selectedDate, props.schedules]);
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const selectedSchedule = props.schedules.find(
+      (schedule) => schedule.day === data.day && schedule.hour === data.hour
+    );
+
+    if (!selectedSchedule) {
+      console.error("Horário não encontrado");
+      return;
+    }
+
+    // Implementar a lógica de agendamento
+    const shcedule: Schedule = await bookSchedule(selectedSchedule.id);
+    if (shcedule) {
+      alert("Consulta agendada com sucesso");
+    } else {
+      alert("Erro ao agendar consulta");
+    }
+
+    await navigate("/profile")
   }
+
   return (
     <div className="flex flex-col items-center justify-center h-full w-full gap-8">
       <Form {...form}>
@@ -60,7 +105,7 @@ const ScheduleForm = ({ medic }: ScheduleFormProps) => {
         >
           <h2 className="w-full text-2xl font-bold text-left">
             Marque a sua consulta com <br />{" "}
-            <span className="text-primary">{medic.nome}</span>
+            <span className="text-primary">{props.medic.name}</span>
           </h2>
           <h3 className="text-left w-full text-gray-700">
             Selecione o dia e horário da sua consulta
@@ -68,26 +113,31 @@ const ScheduleForm = ({ medic }: ScheduleFormProps) => {
           <div className="w-full flex gap-4 justify-between">
             <FormField
               control={form.control}
-              name="date"
+              name="day"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Dia</FormLabel>
                   <FormControl>
-                    <Select {...field}>
+                    <Select
+                      {...field}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedDate(value);
+                        // Reset o campo de horário quando um novo dia é selecionado
+                        form.setValue("hour", "");
+                      }}
+                    >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione o dia" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Dias</SelectLabel>
-                          {Array.from({ length: 30 }, (_, i) => {
-                            const day = i + 1;
-                            return (
-                              <SelectItem key={day} value={`${day}`}>
-                                {`${day}`}
-                              </SelectItem>
-                            );
-                          })}
+                          {uniqueDays.map((day) => (
+                            <SelectItem key={day} value={day}>
+                              {day}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -98,26 +148,35 @@ const ScheduleForm = ({ medic }: ScheduleFormProps) => {
             />
             <FormField
               control={form.control}
-              name="schedule"
+              name="hour"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Horário</FormLabel>
                   <FormControl>
-                    <Select {...field}>
+                    <Select
+                      {...field}
+                      disabled={!selectedDate || availableHours.length === 0}
+                      onValueChange={field.onChange} // Adicione esta linha
+                    >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o horário" />
+                        <SelectValue
+                          placeholder={
+                            !selectedDate
+                              ? "Selecione um dia primeiro"
+                              : availableHours.length === 0
+                              ? "Sem horários disponíveis"
+                              : "Selecione o horário"
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Horários</SelectLabel>
-                          {Array.from({ length: 13 }, (_, i) => {
-                            const hour = i + 8;
-                            return (
-                              <SelectItem key={hour} value={`${hour}:00`}>
-                                {`${hour}:00 - ${hour + 1}:00`}
-                              </SelectItem>
-                            );
-                          })}
+                          {availableHours.map((hour) => (
+                            <SelectItem key={hour} value={hour}>
+                              {hour}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>

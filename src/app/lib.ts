@@ -10,6 +10,42 @@ export type User = {
   updatedAt: string;
 };
 
+export type Doctor = {
+  id: string;
+  name: string;
+  crm: string;
+  phone: string;
+  email: string;
+  clinica: string;
+  especialidade: string;
+  sobre: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Schedule = {
+  id: number;
+  doctorId: number;
+  userId?: number;
+  day: string;
+  hour: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type Review = {
+  id: number;
+  doctorId: number;
+  userId: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  User: {
+    name: string;
+  }
+}
+
 export interface SessionData {
   user?: User;
   isLoggedIn: boolean;

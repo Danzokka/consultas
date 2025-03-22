@@ -3,15 +3,11 @@ import React from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { Doctor } from "@/app/lib";
 
 interface CardMedicoProps {
   className?: string;
-  props: {
-    nome: string;
-    especialidade: string;
-    imagem: string;
-    id: number;
-  };
+  props: Doctor;
 }
 
 const CardMedico = ({ className, props }: CardMedicoProps) => {
@@ -23,12 +19,12 @@ const CardMedico = ({ className, props }: CardMedicoProps) => {
       )}
     >
       <img
-        src={props.imagem}
+        src="/doctors.jpg"
         alt="doctor"
         className="w-full h-56 object-cover rounded-md"
       />
       <div>
-        <h3 className="text-lg font-bold">{props.nome}</h3>
+        <h3 className="text-lg font-bold">{props.name}</h3>
         <p className="text-sm text-gray-500">{props.especialidade}</p>
       </div>
       <Button className="" asChild>

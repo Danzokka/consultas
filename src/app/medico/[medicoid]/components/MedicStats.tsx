@@ -1,12 +1,55 @@
 import { medicoData } from "@/classes/medico";
 import React from "react";
 import { Star } from "lucide-react";
+import { Doctor, Review, Schedule } from "@/app/lib";
 interface MedicStatsProps {
-  medic: medicoData;
+  props: {
+    medic: Doctor;
+    medicSchedules: Schedule[];
+    medicReviews: Review[];
+  };
   className?: string;
 }
 
-const MedicStats = ({ medic, className }: MedicStatsProps) => {
+function getMedicRating(reviews: Review[]) {
+  const total = reviews.reduce((acc, review) => acc + review.rating, 0);
+  return (total / reviews.length).toFixed(1);
+}
+
+function getTotalSchedules(schedules: Schedule[]) {
+  return schedules.length;
+}
+
+function getTotalAppointments(schedules: Schedule[]) {
+  const today = new Date();
+
+  return schedules.filter((schedule) => {
+    // Converte a data dd/mm/aaaa para um objeto Date
+    const [day, month, year] = schedule.day.split("/").map(Number);
+    const scheduleDate = new Date(year, month - 1, day); // month é 0-indexed em JS
+
+    // Retorna true se a data da consulta já passou (é anterior à data atual)
+    return scheduleDate < today && (schedule.userId !== undefined || schedule.userId !== null);
+  }).length;
+}
+
+function getFreeSchedules(schedules: Schedule[]) {
+  const today = new Date();
+
+  return schedules.filter((schedule) => {
+    // Converte a data dd/mm/aaaa para um objeto Date
+    const [day, month, year] = schedule.day.split("/").map(Number);
+    const scheduleDate = new Date(year, month - 1, day); // month é 0-indexed em JS
+
+    // Verifica se a data é futura (maior ou igual à data atual) E se não há usuário associado
+    return (
+      scheduleDate >= today &&
+      (schedule.userId === undefined || schedule.userId === null)
+    );
+  }).length;
+}
+
+const MedicStats = ({ props, className }: MedicStatsProps) => {
   const Card = ({ title, value }: { title: string; value: string }) => {
     return (
       <div className="flex flex-col rounded-lg border border-gray-100 px-4 py-8 text-center gap-2">
@@ -28,10 +71,9 @@ const MedicStats = ({ medic, className }: MedicStatsProps) => {
   };
 
   const stats = [
-    { title: "Avaliação", value: "4.8" },
-    { title: "Consultas Marcadas", value: "24" },
-    { title: "Consultas Realizadas", value: "86" },
-    { title: "Horários Livres", value: "12" },
+    { title: "Avaliação", value: getMedicRating(props.medicReviews) },
+    { title: "Consultas Realizadas", value: getTotalAppointments(props.medicSchedules).toString() },
+    { title: "Consultas Abertas", value: getFreeSchedules(props.medicSchedules).toString() },
   ];
 
   return (
@@ -46,7 +88,7 @@ const MedicStats = ({ medic, className }: MedicStatsProps) => {
         </p>
       </div>
 
-      <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat, index) => (
           <Card key={index} title={stat.title} value={stat.value} />
         ))}

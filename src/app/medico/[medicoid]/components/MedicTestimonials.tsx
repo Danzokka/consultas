@@ -1,92 +1,65 @@
+/* eslint-disable @next/next/no-img-element */
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/magicui/marquee";
-
-const reviews = [
-  {
-    name: "Carlos",
-    username: "@carlos",
-    body: "O doutor é um excelente profissional. Recomendo a todos.",
-    img: "https://avatar.vercel.sh/carlos",
-  },
-  {
-    name: "Ana",
-    username: "@ana",
-    body: "O doutor foi muito atencioso e prestativo. Excelente atendimento.",
-    img: "https://avatar.vercel.sh/ana",
-  },
-  {
-    name: "João",
-    username: "@joao",
-    body: "O doutor me ajudou muito com meu problema de saúde. Muito obrigado!",
-    img: "https://avatar.vercel.sh/joao",
-  },
-  {
-    name: "Maria",
-    username: "@maria",
-    body: "O doutor é um profissional incrível. Muito satisfeita com o atendimento.",
-    img: "https://avatar.vercel.sh/maria",
-  },
-  {
-    name: "Fernanda",
-    username: "@fernanda",
-    body: "O doutor foi muito atencioso e competente. Recomendo!",
-    img: "https://avatar.vercel.sh/fernanda",
-  },
-  {
-    name: "Pedro",
-    username: "@pedro",
-    body: "O doutor é um excelente médico. Muito satisfeito com o atendimento.",
-    img: "https://avatar.vercel.sh/pedro",
-  },
-];
-
-const firstRow = reviews.slice(0, reviews.length / 2);
-const secondRow = reviews.slice(reviews.length / 2);
+import { Review } from "@/app/lib";
 
 const ReviewCard = ({
-  img,
-  name,
-  username,
-  body,
-}: {
-  img: string;
-  name: string;
-  username: string;
-  body: string;
-}) => {
+  User,
+  id,
+  doctorId,
+  userId,
+  rating,
+  comment,
+  createdAt,
+  updatedAt,
+}: Review) => {
   return (
     <figure
       className={cn(
         "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
+        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]"
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={img} />
+        <img
+          className="rounded-full"
+          width="32"
+          height="32"
+          alt=""
+          src={`https://avatar.vercel.sh/${User.name}`}
+        />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
-            {name}
+            {User.name}
           </figcaption>
-          <p className="text-xs font-medium dark:text-white/40">{username}</p>
+          <p className="text-xs font-medium text-gray-500">Criada no dia: {new Date(createdAt).toLocaleDateString("pt-br")}</p>
         </div>
       </div>
-      <blockquote className="mt-2 text-sm">{body}</blockquote>
+      <blockquote className="mt-2 text-sm">{comment}</blockquote>
     </figure>
   );
 };
 
-export function MedicTestimonials() {
+export function MedicTestimonials({
+  reviews,
+  className,
+}: {
+  reviews: Review[];
+  className?: string;
+}) {
+  const firstRow = reviews.slice(0, reviews.length / 2);
+  const secondRow = reviews.slice(reviews.length / 2);
   return (
     <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
       <Marquee pauseOnHover className="[--duration:20s]">
         {firstRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+          <ReviewCard key={review.User.name} {...review} />
         ))}
       </Marquee>
       <Marquee reverse pauseOnHover className="[--duration:20s]">
         {secondRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+          <ReviewCard key={review.User.name} {...review} />
         ))}
       </Marquee>
       <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>

@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { medicoData } from "@/classes/medico";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
@@ -13,13 +12,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ScheduleForm from "./Form";
+import { Doctor, Schedule } from "@/app/lib";
 
 interface MedicHeroProps {
-  medic: medicoData;
+  medic: Doctor
+  schedules: Schedule[]
   className?: string;
 }
 
-const MedicHero = ({ medic }: MedicHeroProps) => {
+const MedicHero = ({ medic, schedules }: MedicHeroProps) => {
   return (
     <section>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
@@ -27,7 +28,7 @@ const MedicHero = ({ medic }: MedicHeroProps) => {
           <div className="max-w-lg md:max-w-none flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <h2 className="text-2xl font-semibold text-primary sm:text-3xl">
-                {medic.nome}
+                {medic.name}
               </h2>
               <h3 className="text-xl font-semibold text-gray-700">
                 {medic.especialidade}
@@ -43,14 +44,19 @@ const MedicHero = ({ medic }: MedicHeroProps) => {
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
-                  <ScheduleForm medic={medic} />
+                  <ScheduleForm props= {
+                    {
+                      medic: medic,
+                      schedules: schedules
+                    }
+                  } />
                 </DialogContent>
               </Dialog>
             </div>
           </div>
 
           <div>
-            <img src={medic.imagem} className="rounded" alt="" />
+            <img src="/doctors.jpg" className="rounded" alt="" />
           </div>
         </div>
       </div>

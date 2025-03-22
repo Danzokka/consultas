@@ -8,8 +8,6 @@ import UserDropdown from "./UserDropdown";
 const Header = async () => {
   const user = await getSession();
 
-  console.log(user);
-
   const pages = [
     { id: 1, name: "Home", href: "/" },
     { id: 2, name: "Sobre", href: "/sobre" },

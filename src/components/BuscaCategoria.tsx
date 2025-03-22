@@ -11,78 +11,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Doctor } from "@/app/lib";
 
-const BuscaCategoria = () => {
+const BuscaCategoria = ({doctors}: {doctors: Doctor[]}) => {
   const [pesquisa, setPesquisa] = React.useState("");
 
-  const medicos = [
-    {
-      id: 1,
-      nome: "Dr. Rafael Dantas",
-      especialidade: "Oftamologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 2,
-      nome: "Dra. Sthefane Silva",
-      especialidade: "Cardiologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 3,
-      nome: "Dr. João Victor",
-      especialidade: "Nutricionista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 4,
-      nome: "Dra. Marina Silva",
-      especialidade: "Dermatologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 5,
-      nome: "Dr. Arthur da Silva",
-      especialidade: "Endocrinologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 6,
-      nome: "Dra. Natalia Bastos",
-      especialidade: "Cardiologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 7,
-      nome: "Dr. César Avante",
-      especialidade: "Otorrinolaringologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 8,
-      nome: "Dr. Romulo Mendonça",
-      especialidade: "Otorrinolaringologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 9,
-      nome: "Dr. Gabriel Diniz",
-      especialidade: "Oftamologista",
-      imagem: "/doctors.jpg",
-    },
-    {
-      id: 10,
-      nome: "Dr. Gabriel Formaio",
-      especialidade: "Psicologista",
-      imagem: "/doctors.jpg",
-    },
-  ];
 
   const handlePesquisa = (e: any) => {
     setPesquisa(e.target.value);
   };
 
-  const medicosFiltrados = medicos.filter((medico) => {
+  const medicosFiltrados = doctors.filter((medico) => {
     return medico.especialidade.toLowerCase().includes(pesquisa.toLowerCase());
   });
 

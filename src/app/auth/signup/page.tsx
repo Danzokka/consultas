@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form";
 import React from "react";
 import Link from "next/link";
+import { signup } from "@/app/auth/authActions";
+
 
 const formSchema = z
   .object({
@@ -24,7 +26,7 @@ const formSchema = z
         required_error: "Email é obrigatório",
       })
       .email("Email inválido"),
-    nome: z
+    name: z
       .string({
         required_error: "Nome é obrigatório",
       })
@@ -42,6 +44,25 @@ const formSchema = z
     confirmPassword: z.string({
       required_error: "Confirmação de senha é obrigatória",
     }),
+    cpfCnpj: z
+      .string({
+        required_error: "CPF/CNPJ é obrigatório.",
+      })
+      .refine((doc) => {
+        const replacedDoc = doc.replace(/\D/g, "");
+        return replacedDoc.length >= 11;
+      }, "CPF/CNPJ deve conter no mínimo 11 caracteres.")
+      .refine((doc) => {
+        const replacedDoc = doc.replace(/\D/g, "");
+        return replacedDoc.length <= 14;
+      }, "CPF/CNPJ deve conter no máximo 14 caracteres.")
+      .refine((doc) => {
+        const replacedDoc = doc.replace(/\D/g, "");
+        return !!Number(replacedDoc);
+      }, "CPF/CNPJ deve conter apenas números."),
+    phone: z.string({
+      required_error: "Telefone é obrigatório",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -53,8 +74,8 @@ const Cadastro = () => {
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await signup(data);
   }
 
   return (
@@ -76,7 +97,7 @@ const Cadastro = () => {
           <div className="flex justify-between">
             <FormField
               control={form.control}
-              name="nome"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
@@ -114,6 +135,34 @@ const Cadastro = () => {
               </FormItem>
             )}
           />
+          <div className="flex items-center justify-between gap-2">
+            <FormField
+              control={form.control}
+              name="cpfCnpj"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPF/CNPJ</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="CPF/CNPJ" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Telefone</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Telefone" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="password"

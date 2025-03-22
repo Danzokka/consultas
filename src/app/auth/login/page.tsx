@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import React from "react";
 import Link from "next/link";
+import { login } from "../authActions";
 
 const formSchema = z.object({
   email: z
@@ -35,8 +36,8 @@ const Login = () => {
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await login(data.email, data.password);
   }
 
   return (

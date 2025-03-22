@@ -2,8 +2,14 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { getSession } from "@/app/actions";
+import UserDropdown from "./UserDropdown";
 
-const Header = () => {
+const Header = async () => {
+  const user = await getSession();
+
+  console.log(user);
+
   const pages = [
     { id: 1, name: "Home", href: "/" },
     { id: 2, name: "Sobre", href: "/sobre" },
@@ -25,9 +31,13 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <Button asChild className="bg-primary font-bold">
-        <Link href="/auth/login">Entrar</Link>
-      </Button>
+      {user && user.user ? (
+        <UserDropdown user={user.user} />
+      ) : (
+        <Button asChild className="bg-primary font-bold">
+          <Link href="/auth/login">Entrar</Link>
+        </Button>
+      )}
     </div>
   );
 };

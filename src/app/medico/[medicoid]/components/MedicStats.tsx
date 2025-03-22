@@ -13,7 +13,7 @@ interface MedicStatsProps {
 
 function getMedicRating(reviews: Review[]) {
   const total = reviews.reduce((acc, review) => acc + review.rating, 0);
-  return (total / reviews.length).toFixed(1);
+  return (total / reviews.length).toFixed(1) || 0;
 }
 
 function getTotalSchedules(schedules: Schedule[]) {
